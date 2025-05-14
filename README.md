@@ -216,5 +216,6 @@ graph TD
     Brain --> Context
     Context --> Sensor
 ```
-
+> [!NOTE]
+> La parte de acciones y consideraciones se irá modificando segúin el desarrollo. Más adelante se explicará la implementacion de dichas acciones y consideraciones.
 
