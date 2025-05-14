@@ -158,7 +158,7 @@ classDiagram
 | `CanFlank`           | `ConstantConsideration`                           | Determina si hay una ruta alterna para flanquear.                                 |
 | `GroupSplitValidity` | `ConstantConsideration`                          | Evalúa si dividir el grupo sigue siendo ventajoso.                                |
 ### Consideraciones compuestas
-> ### 🔁 Acciones complejas mediante múltiples consideraciones
+> ### Acciones compuestas mediante múltiples consideraciones
 >
 > **AttackPlayer**  
 > • `IsPlayerVisible` → alto  
