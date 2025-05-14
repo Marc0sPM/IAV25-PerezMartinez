@@ -157,7 +157,7 @@ classDiagram
 | `HasEscapeRoute`     | `ConstantConsideration`                            | Evalúa si hay rutas seguras hacia las que huir.                                   |
 | `CanFlank`           | `ConstantConsideration`                           | Determina si hay una ruta alterna para flanquear.                                 |
 | `GroupSplitValidity` | `ConstantConsideration`                          | Evalúa si dividir el grupo sigue siendo ventajoso.                                |
-### Consideraciones compuestas**
+### Consideraciones compuestas
 > ### 🔁 Acciones complejas mediante múltiples consideraciones
 >
 > **AttackPlayer**  
