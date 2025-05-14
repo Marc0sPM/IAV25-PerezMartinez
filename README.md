@@ -33,4 +33,115 @@
 > 
 > - Cuando los enemigos vayan en **GRUPO**, la acción de atarcar o huir se verá determinado por la media aritmética de los PF de todos los enemigos.
 >   - **ATACAR** : si pueden, se subdivirán en dos grupos **cuya media no sea más debil que el jugador**. Un grupo atacará al jugador directamente. Otro grupo dará un rodeo para flanquear al jugador y atacarle por la espalda
->   - **HUIR** : en el caso de existir varias rutas de escape, el grupo se subdividirá en dos (de forma que los grupos sean lo más fuerte posible) y cada subgrupo tomará una de las rutas posibles. 
+>   - **HUIR** : en el caso de existir varias rutas de escape, el grupo se subdividirá en dos (de forma que los grupos sean lo más fuerte posible) y cada subgrupo tomará una de las rutas posibles.
+
+## Estructura de Utility AI
+> La estructura principal de la Utility AI se compone de los siguientes elementos:
+> - **Brain** (Cerebro):
+>   -  Es el componente central que gestiona las acciones y su ejecución.
+>   - Utiliza un contexto para evaluar las acciones y decide cuál ejecutar basándose en la utilidad.
+>   - Actualiza constantemente el contexto con la información relevante del entorno.
+> - **Actions** (Acciones):
+>   - Son las posibles acciones que puede realizar un agente.
+>   - Cada acción tiene una consideración que evalúa su utilidad en un contexto determinado.
+>   - Las acciones se ejecutan en el entorno del agente.
+> - **Considerations** (Consideraciones):
+>   - Son los criterios que se utilizan para evaluar la utilidad de una acción.
+>   - Pueden ser simples (constantes, curvas) o compuestas (combinación de varias consideraciones).
+>   - La evaluación de la utilidad se basa en el contexto actual.
+> - **Context** (Contexto):
+>   - Contiene toda la información relevante del entorno del agente.
+>   - Incluye referencias al agente, el sensor, y datos adicionales que se pueden necesitar para evaluar las acciones.
+> - **Sensor** (Sensor):
+>   - Es el componente encargado de detectar objetos en el entorno.
+>   - Utiliza un collider para detectar objetos y mantener una lista de objetos detectados.
+>   - Proporciona métodos para obtener el objetivo más cercano con una etiqueta específica.
+
+## Diagrama de Clases
+> Aqui se muestran la estructura de las clases **BASE** implementadas para esta *Utility AI*.
+
+```mermaid
+classDiagram
+
+    class Context {
+        +Brain brain
+        +NavMeshAgent agent
+        +Transform target
+        +Sensor sensor
+        +Dictionary<string, object> data
+        +T GetData<string, T>(string key)
+        +void SetData<string, T>(string key, T value)
+    }
+
+    class Sensor {
+        +float radius
+        +List<string> targetTags
+        +List<Transform> detectedObjects
+        +SphereCollider sphereCollider
+        +void Start()
+        +void OnTriggerEnter(Collider other)
+        +void OnTriggerExit(Collider other)
+        +void ProcessTrigger(Collider other, Action<Transform> action)
+        +Transform GetClosestTarget(string tag)
+    }
+
+    class Brain {
+        +List<AIAction> actions
+        +Context context
+        +void Awake()
+        +void Update()
+        +void UpdateContext()
+    }
+
+    class AIAction {
+        +string targetTag
+        +Consideration consideration
+        +void Initialize(Context context)
+        +float CalculateUtility(Context context)
+        +abstract void Execute(Context context)
+    }
+
+    class Consideration {
+        +abstract float Evaluate(Context context)
+    }
+
+    class CompositeConsideration {
+        +enum Operation
+         +enum OperationType
+        +bool allMustBeNonZero
+        +OperationType operation
+        +List<Consideration> considerations
+        +override float Evaluate(Context context)
+    }
+
+    class ConstantConsideration {
+        +float value
+        +override float Evaluate(Context context)
+    }
+
+    class CurveConsideration {
+        +AnimationCurve curve
+        +string contextKey
+        +override float Evaluate(Context context)
+        +void Reset()
+    }
+
+    class InRangeConsideration {
+        +float maxDistance
+        +float maxAngle
+        +string targetTag
+        +AnimationCurve curve
+        +override float Evaluate(Context context)
+        +void Reset()
+    }
+
+    Brain *-- Context
+    Brain *-- Sensor
+    AIAction *-- Context
+    AIAction *-- Consideration
+    Consideration <|-- CompositeConsideration
+    Consideration <|-- ConstantConsideration
+    Consideration <|-- CurveConsideration
+    Consideration <|-- InRangeConsideration
+```
+
