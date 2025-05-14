@@ -145,3 +145,76 @@ classDiagram
     Consideration <|-- InRangeConsideration
 ```
 
+## Acciones y consideraciones para el juego
+### Consideraciones
+| Nombre               | Tipo                                           | Descripción                                                                       |
+| -------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------- |
+| `IsPlayerVisible`    | `InRangeConsideration`                          | Evalúa si el jugador está dentro del rango y ángulo de visión.                    |
+| `ForceComparison`    | `CurveConsideration`                               | Devuelve utilidad según si el enemigo tiene más, igual o menos PF que el jugador. |
+| `IsAlone`            | `ConstantConsideration` / `CurveConsideration`   | Devuelve utilidad alta si el enemigo no tiene aliados cerca.                      |
+| `HasAlliesNearby`    | `ConstantConsideration`                         | Se puede usar para modificar el comportamiento en grupo.                          |
+| `GroupAverageForce`  | `CurveConsideration`                             | Media de PF del grupo comparada con la del jugador.                               |
+| `HasEscapeRoute`     | `ConstantConsideration`                            | Evalúa si hay rutas seguras hacia las que huir.                                   |
+| `CanFlank`           | `ConstantConsideration`                           | Determina si hay una ruta alterna para flanquear.                                 |
+| `GroupSplitValidity` | `ConstantConsideration`                          | Evalúa si dividir el grupo sigue siendo ventajoso.                                |
+### Consideraciones compuestas**
+> ### 🔁 Acciones complejas mediante múltiples consideraciones
+>
+> **AttackPlayer**  
+> • `IsPlayerVisible` → alto  
+> • `ForceComparison` → enemigo > jugador  
+> • `IsAlone` → alto si no hay aliados cerca  
+>
+> **GroupAttack**  
+> • `GroupAverageForce` → mayor que jugador  
+> • `GroupSplitValidity` → true  
+>
+> **GroupFlankAttack**  
+> • `GroupAverageForce` → mayor  
+> • `CanFlank` → true  
+>
+> **GroupRetreat**  
+> • `GroupAverageForce` → menor  
+> • `HasEscapeRoute` → true
+
+
+### Acciones
+| Nombre                | Descripción                                            |
+| ------------------    | ------------------------------------------------------ |
+| `AttackPlayer`        | Acerca al jugador y lo ataca si es más débil.          |
+| `RetreatToAllies`     | Busca aliados cercanos y se une a ellos.               |
+| `GroupAttack`         | Coordina ataque en grupo.                              |
+| `GroupFlankAttack`    | Subgrupo flanquea al jugador por otra ruta.            |
+| `GroupRetreat`        | Se divide el grupo y se escapan por diferentes rutas.  |
+| `Patrol`              | Movimiento de un punto a otro cuando no hay estímulos. |
+
+### Interacion entre acciones y consideraciones
+```mermaid
+graph TD
+    Brain -->|evalúa| Action1[AttackPlayer]
+    Brain --> Action2[RetreatToAllies]
+    Brain --> Action3[GroupAttack]
+    Brain --> Action4[GroupFlankAttack]
+    Brain --> Action5[GroupRetreat]
+
+    Action1 -->|usa| C1[IsPlayerVisible]
+    Action1 --> C2[ForceComparison]
+    Action1 --> C3[IsAlone]
+
+    Action2 --> C1
+    Action2 --> C4[HasAlliesNearby]
+
+    Action3 --> C5[GroupAverageForce]
+    Action3 --> C6[GroupSplitValidity]
+
+    Action4 --> C5
+    Action4 --> C7[CanFlank]
+
+    Action5 --> C5
+    Action5 --> C8[HasEscapeRoute]
+
+    Brain --> Context
+    Context --> Sensor
+```
+
+
