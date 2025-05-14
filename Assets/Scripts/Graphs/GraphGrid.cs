@@ -15,10 +15,19 @@ namespace UCM.IAV.Navegacion
     using System.IO;
     using UCM.IAV.Movimiento;
     using UnityEditor;
+    using Unity.AI.Navigation;
+    using UnityEngine.AI;
+    using System.Collections;
 
     public class GraphGrid : Graph
     {
         const int MAX_TRIES = 1000;
+
+#region FINAL
+        public NavMeshSurface navMeshSurface;
+#endregion
+
+
 
         public GameObject wallPrefab1;
         public GameObject wallPrefab2;
@@ -48,7 +57,23 @@ namespace UCM.IAV.Navegacion
         private void Awake()
         {
             mapName = GameManager.instance.getSize() + ".map";
+            navMeshSurface = GetComponent<NavMeshSurface>();
         }
+
+        #region FINAL
+        IEnumerator GenerateNavMesh()
+        {  // Navmesh settings
+            //navMeshSurface.useGeometry = NavMeshCollectGeometry.RenderMeshes;
+            //navMeshSurface.minRegionArea = 0.05f;
+            //navMeshSurface.overrideTileSize = true;
+            //navMeshSurface.tileSize = 1;
+            //navMeshSurface.overrideVoxelSize = true;
+            //navMeshSurface.voxelSize = 0.05f;
+            navMeshSurface.BuildNavMesh();
+            yield return null;
+
+        }
+#endregion
 
         private int GridToId(int x, int y)
         {
@@ -63,7 +88,7 @@ namespace UCM.IAV.Navegacion
             return location;
         }
 
-        private void LoadMap(string filename)
+        IEnumerator LoadMap(string filename)
         {
             string path;
             
@@ -120,9 +145,15 @@ namespace UCM.IAV.Navegacion
                             id = GridToId(j, i);
 
                             if (mapVertices[i, j])
+                            {
                                 vertexObjs[id] = Instantiate(vertexPrefab, position, Quaternion.identity, this.gameObject.transform) as GameObject;
+                               
+                            }
                             else
+                            {
+                               
                                 vertexObjs[id] = WallInstantiate(position, i, j);
+                            }
 
                             vertexObjs[id].name = vertexObjs[id].name.Replace("(Clone)", id.ToString());
                             Vertex v = vertexObjs[id].AddComponent<Vertex>();
@@ -144,13 +175,19 @@ namespace UCM.IAV.Navegacion
             {
                 Debug.LogException(e);
             }
+            yield return null;
         }
 
         public override void Load()
         {
-            LoadMap(mapName);
+            StartCoroutine(LoadEnumerator());
         }
 
+        IEnumerator LoadEnumerator ()
+        {
+            yield return LoadMap(mapName);
+            yield return GenerateNavMesh();
+        }
         protected void SetNeighbours(int x, int y, bool get8 = false)
         {
             int col = x;
