@@ -219,3 +219,17 @@ graph TD
 > [!NOTE]
 > La parte de acciones y consideraciones se irá modificando segúin el desarrollo. Más adelante se explicará la implementacion de dichas acciones y consideraciones.
 
+## Licencia
+> Marcos Pérez Martínez, autor de la documentación, código y recursos de este trabajo, concedo permiso permanente a los profesores de la Facultad de Informática de la Universidad Complutense de Madrid para utilizar nuestro material, con sus comentarios y evaluaciones, con fines educativos o de investigación; ya sea para obtener datos agregados de forma anónima como para utilizarlo total o parcialmente reconociendo expresamente nuestra autoría.
+>
+> Una vez superada con éxito la asignatura se prevé publicar todo en abierto (la documentación con licencia Creative Commons Attribution 4.0 International (CC BY 4.0) y el código con licencia GNU Lesser General Public License 3.0).
+
+## Referencias
+>* ***AI for Games*, Ian Millington**, donde se aporta una amplia experiencia profesional al problema de mejorar la calidad de la IA en los juegos. Describe numerosos ejemplos de juegos reales y explora las ideas subyacentes a través de estudios de casos detallados..
+>* **[Utility AI: Mastering Smart Decisions in Unity!](https://www.youtube.com/watch?v=S4oyqrsU2WU&t=1233s&ab_channel=git-amend)**
+Video donde crea y explica desde cero una implementación de Utility AI.  
+>* **[Kaykit Medieval Builder Pack](https://kaylousberg.itch.io/kaykit-medieval-builder-pack).** Paquete de recursos de juego que contiene más de  200 recursos de escenarios medievales estilizados.
+>* **[Kaykit Dungeon](https://kaylousberg.itch.io/kaykit-dungeon).** Paquete de recursos de juego que contiene más de 200 recursos y personajes de mazmorras estilizados en 3D.
+>* **[Kaykit Animations](https://kaylousberg.itch.io/kaykit-animations).** El paquete de animación es un conjunto de animaciones de personajes diseñadas para usarse con los personajes de KayKit
+
+
