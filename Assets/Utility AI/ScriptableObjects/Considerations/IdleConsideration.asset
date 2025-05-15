@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc4f251104333d4f88108513606d167, type: 3}
-  m_Name: Idle
+  m_Script: {fileID: 11500000, guid: ec6490f4bc11cdf4584da353b931fb9e, type: 3}
+  m_Name: IdleConsideration
   m_EditorClassIdentifier: 
-  targetTag: Minotaur
-  consideration: {fileID: 11400000, guid: 87e9a91e162a7664ebb33802414a3dae, type: 2}
+  value: 0.2

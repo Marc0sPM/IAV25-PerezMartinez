@@ -61,16 +61,9 @@ namespace UCM.IAV.Navegacion
         }
 
         #region FINAL
-        IEnumerator GenerateNavMesh()
-        {  // Navmesh settings
-            //navMeshSurface.useGeometry = NavMeshCollectGeometry.RenderMeshes;
-            //navMeshSurface.minRegionArea = 0.05f;
-            //navMeshSurface.overrideTileSize = true;
-            //navMeshSurface.tileSize = 1;
-            //navMeshSurface.overrideVoxelSize = true;
-            //navMeshSurface.voxelSize = 0.05f;
+        public void GenerateNavMesh()
+        { 
             navMeshSurface.BuildNavMesh();
-            yield return null;
 
         }
 #endregion
@@ -186,7 +179,7 @@ namespace UCM.IAV.Navegacion
         IEnumerator LoadEnumerator ()
         {
             yield return LoadMap(mapName);
-            yield return GenerateNavMesh();
+            //GenerateNavMesh();
         }
         protected void SetNeighbours(int x, int y, bool get8 = false)
         {

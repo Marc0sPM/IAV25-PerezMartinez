@@ -7,7 +7,7 @@ namespace UCM.IAV.Movimiento
     /// Clase para el comportamiento de agente que consiste en ser el jugador usando NavMesh
     /// </summary>
     [RequireComponent(typeof(NavMeshAgent))]
-    public class ControlJugador : ComportamientoAgente
+    public class ControlJugador : MonoBehaviour
     {
         private NavMeshAgent agenteNavMesh;
 
@@ -49,23 +49,6 @@ namespace UCM.IAV.Movimiento
                     Debug.DrawRay(hit.point, Vector3.up * 2, Color.green, 2f);
                 }
             }
-        }
-
-        public override Direccion GetDireccion()
-        {
-            Direccion direccion = new Direccion();
-
-            // Devuelve la dirección actual como vector para mantener compatibilidad
-            if (agenteNavMesh.hasPath && agenteNavMesh.remainingDistance > offset)
-            {
-                direccion.lineal = agenteNavMesh.desiredVelocity;
-            }
-            else
-            {
-                direccion.lineal = Vector3.zero;
-            }
-
-            return direccion;
         }
     }
 }

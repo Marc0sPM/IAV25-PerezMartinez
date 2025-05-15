@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec6490f4bc11cdf4584da353b931fb9e, type: 3}
-  m_Name: Idle
+  m_Script: {fileID: 11500000, guid: 5e800a9eac4f12443b4d035736180099, type: 3}
+  m_Name: MoveToPlayer
   m_EditorClassIdentifier: 
-  value: 0
+  targetTag: Player
+  consideration: {fileID: 11400000, guid: cdf45644190c878459bb88a46c00e24e, type: 2}

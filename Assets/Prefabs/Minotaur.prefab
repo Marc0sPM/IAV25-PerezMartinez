@@ -467,13 +467,13 @@ GameObject:
   - component: {fileID: 928812362819838011}
   - component: {fileID: 5856985828648263928}
   - component: {fileID: 5856985828648263929}
-  - component: {fileID: 4308355810874672084}
   - component: {fileID: 8357271194336293764}
-  - component: {fileID: -1070488073120413515}
-  - component: {fileID: 6756090097224001393}
+  - component: {fileID: 3233022185522679214}
+  - component: {fileID: 8032651691335297307}
+  - component: {fileID: 5278533478585411628}
   m_Layer: 7
   m_Name: Minotaur
-  m_TagString: Untagged
+  m_TagString: Minotaur
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -564,28 +564,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.42
   m_Center: {x: 0, y: 0.4, z: 0}
---- !u!114 &4308355810874672084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5856985828648263931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f48bb55b5c012cf4cb79a445e408f395, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  combinarPorPeso: 0
-  combinarPorPrioridad: 1
-  umbralPrioridad: 0.2
-  velocidadMax: 8
-  rotacionMax: 20
-  aceleracionMax: 7
-  aceleracionAngularMax: 5
-  velocidad: {x: 0, y: 0, z: 0}
-  rotacion: 0
-  orientacion: 0
 --- !u!114 &8357271194336293764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -598,7 +576,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3c1821a2a9e9042a9e648ea61af8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-1070488073120413515
+--- !u!195 &3233022185522679214
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5856985828648263931}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 5
+  m_Acceleration: 5
+  avoidancePriority: 50
+  m_AngularSpeed: 5000
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &8032651691335297307
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -607,15 +607,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5856985828648263931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af78d8bfaae4f69468209bf8232e52e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 087291f26ed2e3e42a3888e86bc0a33c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangoVision: 4
-  anguloVision: 60
-  cantidadRayos: 10
-  playerLayer: 3
-  obstacleLayers: 0600000009000000
---- !u!114 &6756090097224001393
+  radius: 10
+  targetTags:
+  - Player
+  detectedObjects: []
+--- !u!114 &5278533478585411628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -624,14 +623,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5856985828648263931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ffa41cffd326f64b856316d349eca5c, type: 3}
+  m_Script: {fileID: 11500000, guid: b0bc4a40fe9e86a40929cb859b9a81c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  peso: 1
-  prioridad: 1
-  objetivo: {fileID: 0}
-  maxTime: 10
-  minTime: 7
+  actions:
+  - {fileID: 11400000, guid: 591dae68d3968104eb37782fbd1d7d29, type: 2}
+  - {fileID: 11400000, guid: 45550a106021bef48ab8b7b6d8467960, type: 2}
+  context: {fileID: 0}
 --- !u!1 &6227627562668922387
 GameObject:
   m_ObjectHideFlags: 0
@@ -813,7 +811,6 @@ GameObject:
   - component: {fileID: 116078618447583930}
   - component: {fileID: 7448155279448101913}
   - component: {fileID: 6714168204369594045}
-  - component: {fileID: 4847393998361609635}
   - component: {fileID: 2088125191281208512}
   m_Layer: 0
   m_Name: Sphere
@@ -908,18 +905,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4847393998361609635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7872998543525572461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6e54cf6bb1548240949ba9d835d0b66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2088125191281208512
 MonoBehaviour:
   m_ObjectHideFlags: 0

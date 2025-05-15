@@ -5,7 +5,7 @@ using UnityUtils;
 
 namespace UtilityAI
 {
-    public class Context
+    public class Context : MonoBehaviour
     {
         public Brain brain;
         public NavMeshAgent agent;

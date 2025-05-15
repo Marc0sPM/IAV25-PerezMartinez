@@ -20,7 +20,7 @@ namespace UCM.IAV.Navegacion
 
         public GameObject static_minotaur;
 
-        private Graph graph;
+        private GraphGrid graph;
 
         public int numMinos = 3;
 
@@ -41,6 +41,11 @@ namespace UCM.IAV.Navegacion
 
             for (int i = 0; i < numMinos; i++)
                 GenerateMino();
+
+            // Se genera navmesh surface despues de instanciar los minotauros
+            graph.GenerateNavMesh();
+
+
         }
 
         void GenerateMino()

@@ -23,7 +23,7 @@ namespace UCM.IAV.Movimiento
 
         // Textos UI
         Text fRText;
-        Text heuristicText;
+       //  Text heuristicText;
         Text label;
         Text label2;
         string mazeSize = "10x10";
@@ -122,8 +122,8 @@ namespace UCM.IAV.Movimiento
                 RestartScene();
             if (Input.GetKeyDown(KeyCode.F))
                 ChangeFrameRate();
-            if (Input.GetKeyDown(KeyCode.C))
-                heuristicText.text = theseusGraph.ChangeHeuristic();
+            //if (Input.GetKeyDown(KeyCode.C))
+            //    heuristicText.text = theseusGraph.ChangeHeuristic();
         }
 
         private void FindGO()
@@ -136,8 +136,8 @@ namespace UCM.IAV.Movimiento
             else if (SceneManager.GetActiveScene().name == "Labyrinth") // Nombre de escena que habría que llevar a una constante
             {
                 fRText = GameObject.FindGameObjectWithTag("Framerate").GetComponent<Text>();
-                heuristicText = GameObject.FindGameObjectWithTag("Heuristic").GetComponent<Text>();
-                theseusGraph = GameObject.FindGameObjectWithTag("TesterGraph").GetComponent<TheseusGraph>();
+                // heuristicText = GameObject.FindGameObjectWithTag("Heuristic").GetComponent<Text>();
+                //theseusGraph = GameObject.FindGameObjectWithTag("TesterGraph").GetComponent<TheseusGraph>();
                 exitSlab = GameObject.FindGameObjectWithTag("Exit");
                 startSlab = GameObject.FindGameObjectWithTag("Start");
                 player = GameObject.Find("Avatar");
