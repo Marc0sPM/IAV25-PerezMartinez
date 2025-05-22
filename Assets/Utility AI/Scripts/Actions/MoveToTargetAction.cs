@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityUtils;
 
 namespace UtilityAI
 {
@@ -18,8 +21,18 @@ namespace UtilityAI
         {
           var target = context.sensor.GetClosestTarget(targetTag);
             if (target == null) return;
+            NavMeshAgent agent = context.agent; 
 
-            context.agent.SetDestination(target.position);
+            agent.SetDestination(target.position);
+
+            agent.updateRotation = false;
+            Vector3 direction = (agent.steeringTarget - agent.transform.position).With(y:0).normalized;
+
+            if(direction.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
 
         }
     }
