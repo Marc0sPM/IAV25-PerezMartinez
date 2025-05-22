@@ -15,29 +15,45 @@ namespace UtilityAI
 
         public override float Evaluate(Context context)
         {
-          if(!context.sensor.targetTags.Contains(targetTag))
+            if (!context.sensor.targetTags.Contains(targetTag))
             {
                 context.sensor.targetTags.Add(targetTag);
             }
-          Transform targetTransform = context.sensor.GetClosestTarget(targetTag);
+
+            Transform targetTransform = context.sensor.GetClosestTarget(targetTag);
             if (targetTransform == null) return 0f;
 
             Transform agentTransform = context.agent.transform;
             bool isInRange = agentTransform.InRangeOf(targetTransform, maxDistance, masAngle);
-
             if (!isInRange) return 0f;
 
+            // Lanzamos un raycast desde el agente hacia el objetivo
+            Vector3 origin = agentTransform.position + Vector3.up * 0.5f; // Ajuste de altura si necesario
+            Vector3 direction = (targetTransform.position - agentTransform.position).normalized;
+            float distance = Vector3.Distance(agentTransform.position, targetTransform.position);
+
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
+            {
+                if (hit.collider.CompareTag("Wall"))
+                {
+                    // Hay una pared bloqueando la vista
+                    return 0f;
+                }
+
+                // Opcional: asegurarse de que golpeamos el objetivo o que no hay nada más en medio
+                if (hit.collider.transform != targetTransform && hit.collider.CompareTag(targetTag) == false)
+                {
+                    return 0f;
+                }
+            }
+
+            // Calculamos utilidad en base a la distancia
             Vector3 directionToTarget = targetTransform.position - agentTransform.position;
-            // Calculate the distance to the target while ignoring the y-axis
             float distanceToTarget = directionToTarget.With(y: 0).magnitude;
-
             float normalizedDistance = Mathf.Clamp01(distanceToTarget / maxDistance);
-
             float utility = curve.Evaluate(normalizedDistance);
             return Mathf.Clamp01(utility);
-
         }
-
 
         private void Reset()
         {
@@ -48,4 +64,3 @@ namespace UtilityAI
         }
     }
 }
-
