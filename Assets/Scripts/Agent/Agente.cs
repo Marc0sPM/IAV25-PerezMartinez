@@ -2,7 +2,7 @@
    Copyright (C) 2020-2023 Federico Peinado
    http://www.federicopeinado.com
    Este fichero forma parte del material de la asignatura Inteligencia Artificial para Videojuegos.
-   Esta asignatura se imparte en la Facultad de Informática de la Universidad Complutense de Madrid (España).
+   Esta asignatura se imparte en la Facultad de Informï¿½tica de la Universidad Complutense de Madrid (Espaï¿½a).
    Autor: Federico Peinado 
    Contacto: email@federicopeinado.com
 */
@@ -36,27 +36,27 @@ namespace UCM.IAV.Movimiento {
         public float umbralPrioridad = 0.2f;
 
         /// <summary>
-        /// Velocidad máxima
+        /// Velocidad mï¿½xima
         /// </summary>
-        [Tooltip("Velocidad (lineal) máxima")]
+        [Tooltip("Velocidad (lineal) mï¿½xima")]
         public float velocidadMax;
 
         /// <summary>
-        /// Rotación máxima
+        /// Rotaciï¿½n mï¿½xima
         /// </summary>
-        [Tooltip("Rotación (velocidad angular) máxima")]
+        [Tooltip("Rotaciï¿½n (velocidad angular) mï¿½xima")]
         public float rotacionMax;
 
         /// <summary>
-        /// Aceleración máxima
+        /// Aceleraciï¿½n mï¿½xima
         /// </summary>
-        [Tooltip("Aceleración (lineal) máxima")]
+        [Tooltip("Aceleraciï¿½n (lineal) mï¿½xima")]
         public float aceleracionMax;
 
         /// <summary>
-        /// Aceleración angular máxima
+        /// Aceleraciï¿½n angular mï¿½xima
         /// </summary>
-        [Tooltip("Aceleración angular máxima")]
+        [Tooltip("Aceleraciï¿½n angular mï¿½xima")]
         public float aceleracionAngularMax;
 
         /// <summary>
@@ -66,33 +66,33 @@ namespace UCM.IAV.Movimiento {
         public Vector3 velocidad;
 
         /// <summary>
-        /// Rotación (o velocidad angular; se puede dar una rotación de inicio)
+        /// Rotaciï¿½n (o velocidad angular; se puede dar una rotaciï¿½n de inicio)
         /// </summary>
-        [Tooltip("Rotación (velocidad angular)")]
+        [Tooltip("Rotaciï¿½n (velocidad angular)")]
         public float rotacion;
 
         /// <summary>
         /// Orientacion (hacia donde encara el agente)
         /// </summary>
-        [Tooltip("Orientación")]
+        [Tooltip("Orientaciï¿½n")]
         public float orientacion;
 
         /// <summary>
-        /// Valor de dirección (instrucciones de movimiento)
+        /// Valor de direcciï¿½n (instrucciones de movimiento)
         /// </summary>
-        [Tooltip("Dirección (instrucciones de movimiento)")]
+        [Tooltip("Direcciï¿½n (instrucciones de movimiento)")]
         protected Direccion direccion;
 
         /// <summary>
-        /// Grupos de direcciones, organizados según su prioridad
+        /// Grupos de direcciones, organizados segï¿½n su prioridad
         /// </summary>
         [Tooltip("Grupos de direcciones")]
         private Dictionary<int, List<Direccion>> grupos;
 
         /// <summary>
-        /// Componente de cuerpo rígido (si la tiene el agente)
+        /// Componente de cuerpo rï¿½gido (si la tiene el agente)
         /// </summary>
-        [Tooltip("Cuerpo rígido")]
+        [Tooltip("Cuerpo rï¿½gido")]
         private Rigidbody cuerpoRigido;
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace UCM.IAV.Movimiento {
         /// </summary>
         void Start()
         {
-            // Descomentar estas líneas si queremos ignorar los valores iniciales de velocidad y rotación
+            // Descomentar estas lï¿½neas si queremos ignorar los valores iniciales de velocidad y rotaciï¿½n
             //velocidad = Vector3.zero; 
             //rotacion = 0.0f
             direccion = new Direccion();
@@ -122,32 +122,32 @@ namespace UCM.IAV.Movimiento {
         }
 
         /// <summary>
-        /// En cada tick fijo, si hay movimiento dinámico, uso el simulador físico aplicando las fuerzas que corresponda para moverlo.
-        /// Un cuerpo rígido se puede mover con movePosition, cambiando la velocity o aplicando fuerzas, que es lo habitual y que permite respetar otras fuerzas que estén actuando sobre él a la vez.
+        /// En cada tick fijo, si hay movimiento dinï¿½mico, uso el simulador fï¿½sico aplicando las fuerzas que corresponda para moverlo.
+        /// Un cuerpo rï¿½gido se puede mover con movePosition, cambiando la velocity o aplicando fuerzas, que es lo habitual y que permite respetar otras fuerzas que estï¿½n actuando sobre ï¿½l a la vez.
         /// </summary>
         public virtual void FixedUpdate()
         {
             if (cuerpoRigido.isKinematic)
-                return; // El movimiento será cinemático, fotograma a fotograma con Update
+                return; // El movimiento serï¿½ cinemï¿½tico, fotograma a fotograma con Update
 
-            // Limitamos la aceleración al máximo que acepta este agente (aunque normalmente vendrá ya limitada)
+            // Limitamos la aceleraciï¿½n al mï¿½ximo que acepta este agente (aunque normalmente vendrï¿½ ya limitada)
             if (direccion.lineal.sqrMagnitude > aceleracionMax)
                 direccion.lineal = direccion.lineal.normalized * aceleracionMax; 
 
-            // La opción por defecto sería usar ForceMode.Force, pero eso implicaría que el comportamiento de dirección tuviese en cuenta la masa a la hora de calcular la aceleración que se pide
+            // La opciï¿½n por defecto serï¿½a usar ForceMode.Force, pero eso implicarï¿½a que el comportamiento de direcciï¿½n tuviese en cuenta la masa a la hora de calcular la aceleraciï¿½n que se pide
             cuerpoRigido.AddForce(direccion.lineal, ForceMode.Acceleration);
 
-            // Limitamos la aceleración angular al máximo que acepta este agente (aunque normalmente vendrá ya limitada)
+            // Limitamos la aceleraciï¿½n angular al mï¿½ximo que acepta este agente (aunque normalmente vendrï¿½ ya limitada)
             if (direccion.angular > aceleracionAngularMax)
                 direccion.angular = aceleracionAngularMax;
 
-            // Rotamos el objeto siempre sobre su eje Y (hacia arriba), asumiendo que el agente está sobre un plano y quiere mirar a un lado o a otro
-            // La opción por defecto sería usar ForceMode.Force, pero eso implicaría que el comportamiento de dirección tuviese en cuenta la masa a la hora de calcular la aceleración que se pide
+            // Rotamos el objeto siempre sobre su eje Y (hacia arriba), asumiendo que el agente estï¿½ sobre un plano y quiere mirar a un lado o a otro
+            // La opciï¿½n por defecto serï¿½a usar ForceMode.Force, pero eso implicarï¿½a que el comportamiento de direcciï¿½n tuviese en cuenta la masa a la hora de calcular la aceleraciï¿½n que se pide
             cuerpoRigido.AddTorque(transform.up * direccion.angular, ForceMode.Acceleration);
 
-            /* El tema de la orientación, descomentarlo si queremos sobreescribir toda la cuestión de la velocidad angular
-            orientacion += rotacion / Time.deltaTime; // En lugar de * he puesto / para así calcular la aceleración, que es lo que debe ir aquí
-            // Necesitamos "constreñir" inteligentemente la orientación al rango (0, 360)
+            /* El tema de la orientaciï¿½n, descomentarlo si queremos sobreescribir toda la cuestiï¿½n de la velocidad angular
+            orientacion += rotacion / Time.deltaTime; // En lugar de * he puesto / para asï¿½ calcular la aceleraciï¿½n, que es lo que debe ir aquï¿½
+            // Necesitamos "constreï¿½ir" inteligentemente la orientaciï¿½n al rango (0, 360)
             if (orientacion < 0.0f)
                 orientacion += 360.0f;
             else if (orientacion > 360.0f)
@@ -158,11 +158,11 @@ namespace UCM.IAV.Movimiento {
             */
             LookDirection();
 
-            // Aunque también se controlen los máximos en el LateUpdate, entiendo que conviene también hacerlo aquí, en FixedUpdate, que puede llegar a ejecutarse más veces
+            // Aunque tambiï¿½n se controlen los mï¿½ximos en el LateUpdate, entiendo que conviene tambiï¿½n hacerlo aquï¿½, en FixedUpdate, que puede llegar a ejecutarse mï¿½s veces
 
             // Limito la velocidad lineal al terminar 
-            if (cuerpoRigido.velocity.magnitude > velocidadMax)
-                cuerpoRigido.velocity = cuerpoRigido.velocity.normalized * velocidadMax;
+            if (cuerpoRigido.linearVelocity.magnitude > velocidadMax)
+                cuerpoRigido.linearVelocity = cuerpoRigido.linearVelocity.normalized * velocidadMax;
 
             // Limito la velocidad angular al terminar
             if (cuerpoRigido.angularVelocity.magnitude > rotacionMax)
@@ -172,14 +172,14 @@ namespace UCM.IAV.Movimiento {
         }
 
         /// <summary>
-        /// En cada tick, hace lo básico del movimiento cinemático del agente
-        /// Un objeto que no atiende a físicas se mueve a base de trasladar su transformada.
-        /// Al no haber Freeze Rotation, ni rozamiento ni nada... seguramente vaya todo mucho más rápido en cinemático que en dinámico
+        /// En cada tick, hace lo bï¿½sico del movimiento cinemï¿½tico del agente
+        /// Un objeto que no atiende a fï¿½sicas se mueve a base de trasladar su transformada.
+        /// Al no haber Freeze Rotation, ni rozamiento ni nada... seguramente vaya todo mucho mï¿½s rï¿½pido en cinemï¿½tico que en dinï¿½mico
         /// </summary>
         public virtual void Update()
         {
             if (!cuerpoRigido.isKinematic)
-                return; // El movimiento será dinámico, controlado por la física y FixedUpdate
+                return; // El movimiento serï¿½ dinï¿½mico, controlado por la fï¿½sica y FixedUpdate
 
             // Limito la velocidad lineal antes de empezar
             if (velocidad.magnitude > velocidadMax)
@@ -195,7 +195,7 @@ namespace UCM.IAV.Movimiento {
             transform.Translate(desplazamiento, Space.World);
 
             orientacion += rotacion * Time.deltaTime;
-            // Vamos a mantener la orientación siempre en el rango canónico de 0 a 360 grados
+            // Vamos a mantener la orientaciï¿½n siempre en el rango canï¿½nico de 0 a 360 grados
             if (orientacion < 0.0f)
                 orientacion += 360.0f;
             else if (orientacion > 360.0f)
@@ -203,14 +203,14 @@ namespace UCM.IAV.Movimiento {
 
             LookDirection();
 
-            // Elimino la rotación totalmente, dejándolo en el estado inicial, antes de rotar el objeto lo que nos marque la variable orientación
+            // Elimino la rotaciï¿½n totalmente, dejï¿½ndolo en el estado inicial, antes de rotar el objeto lo que nos marque la variable orientaciï¿½n
             transform.rotation = new Quaternion();
             transform.Rotate(Vector3.up, orientacion);
 
         }
 
         /// <summary>
-        /// En cada parte tardía del tick, hace tareas de corrección numérica 
+        /// En cada parte tardï¿½a del tick, hace tareas de correcciï¿½n numï¿½rica 
         /// </summary>
         public virtual void LateUpdate()
         {
@@ -221,18 +221,18 @@ namespace UCM.IAV.Movimiento {
             }
 
             if (cuerpoRigido != null) {
-                return; // El movimiento será dinámico, controlado por la física y FixedUpdate
+                return; // El movimiento serï¿½ dinï¿½mico, controlado por la fï¿½sica y FixedUpdate
             }
 
-            // Limitamos la aceleración al máximo que acepta este agente (aunque normalmente vendrá ya limitada)
+            // Limitamos la aceleraciï¿½n al mï¿½ximo que acepta este agente (aunque normalmente vendrï¿½ ya limitada)
             if (direccion.lineal.sqrMagnitude > aceleracionMax)
                 direccion.lineal = direccion.lineal.normalized * aceleracionMax;
 
-            // Limitamos la aceleración angular al máximo que acepta este agente (aunque normalmente vendrá ya limitada)
+            // Limitamos la aceleraciï¿½n angular al mï¿½ximo que acepta este agente (aunque normalmente vendrï¿½ ya limitada)
             if (direccion.angular > aceleracionAngularMax)
                 direccion.angular = aceleracionAngularMax;
 
-            // Aquí se calcula la próxima velocidad y rotación en función de las aceleraciones  
+            // Aquï¿½ se calcula la prï¿½xima velocidad y rotaciï¿½n en funciï¿½n de las aceleraciones  
             velocidad += direccion.lineal * Time.deltaTime;
             rotacion += direccion.angular * Time.deltaTime;
 
@@ -242,16 +242,16 @@ namespace UCM.IAV.Movimiento {
             if (direccion.lineal.sqrMagnitude == 0.0f) 
                 velocidad = Vector3.zero; 
 
-            /// En cada parte tardía del tick, encarar el agente (al menos para el avatar).... si es que queremos hacer este encaramiento
+            /// En cada parte tardï¿½a del tick, encarar el agente (al menos para el avatar).... si es que queremos hacer este encaramiento
             transform.LookAt(transform.position + velocidad);
 
-            // Se deja la dirección vacía para el próximo fotograma
+            // Se deja la direcciï¿½n vacï¿½a para el prï¿½ximo fotograma
             direccion = new Direccion();
         }
 
 
         /// <summary>
-        /// Establece la dirección tal cual
+        /// Establece la direcciï¿½n tal cual
         /// </summary>
         public void SetDireccion(Direccion direccion)
         {
@@ -259,7 +259,7 @@ namespace UCM.IAV.Movimiento {
         }
 
         /// <summary>
-        /// Establece la dirección por peso
+        /// Establece la direcciï¿½n por peso
         /// </summary>
         /// <param name="direccion"></param>
         /// <param name="peso"></param>
@@ -270,7 +270,7 @@ namespace UCM.IAV.Movimiento {
         }
 
         /// <summary>
-        /// Establece la dirección por prioridad
+        /// Establece la direcciï¿½n por prioridad
         /// </summary>
         /// <param name="direccion"></param>
         /// <param name="prioridad"></param>
@@ -284,7 +284,7 @@ namespace UCM.IAV.Movimiento {
         }
 
         /// <summary>
-        /// Devuelve el valor de dirección calculado por prioridad
+        /// Devuelve el valor de direcciï¿½n calculado por prioridad
         /// </summary>
         /// <returns></returns>
         private Direccion GetPrioridadDireccion()
@@ -301,7 +301,7 @@ namespace UCM.IAV.Movimiento {
                     direccion.lineal += direccionIndividual.lineal;
                     direccion.angular += direccionIndividual.angular;
                 }
-                // Sólo si el resultado supera un umbral, entonces nos quedamos con esta salida y dejamos de mirar grupos con menos prioridad
+                // Sï¿½lo si el resultado supera un umbral, entonces nos quedamos con esta salida y dejamos de mirar grupos con menos prioridad
                 if (direccion.lineal.magnitude > umbralPrioridad
                      || Mathf.Abs(direccion.angular) > umbralPrioridad)
                 {
@@ -312,15 +312,15 @@ namespace UCM.IAV.Movimiento {
         }
 
         /// <summary>
-        /// Calculates el Vector3 dado un cierto valor de orientación
+        /// Calculates el Vector3 dado un cierto valor de orientaciï¿½n
         /// </summary>
         /// <param name="orientacion"></param>
         /// <returns></returns>
         public Vector3 OriToVec(float orientacion)
         {
             Vector3 vector = Vector3.zero;
-            vector.x = Mathf.Sin(orientacion * Mathf.Deg2Rad) * 1.0f; //  * 1.0f se añade para asegurar que el tipo es float
-            vector.z = Mathf.Cos(orientacion * Mathf.Deg2Rad) * 1.0f; //  * 1.0f se añade para asegurar que el tipo es float
+            vector.x = Mathf.Sin(orientacion * Mathf.Deg2Rad) * 1.0f; //  * 1.0f se aï¿½ade para asegurar que el tipo es float
+            vector.z = Mathf.Cos(orientacion * Mathf.Deg2Rad) * 1.0f; //  * 1.0f se aï¿½ade para asegurar que el tipo es float
             return vector.normalized;
         }
 
@@ -328,7 +328,7 @@ namespace UCM.IAV.Movimiento {
         {
             if (direccion.lineal.x != 0 || direccion.lineal.z != 0)
             {
-                //Rotación del personaje hacia donde camina (suavizado)
+                //Rotaciï¿½n del personaje hacia donde camina (suavizado)
                 float anguloDestino = Mathf.Atan2(direccion.lineal.x, direccion.lineal.z) * Mathf.Rad2Deg;
                 //Esto es raro pero Brackeys dice que funciona
                 float anguloSuave = Mathf.SmoothDampAngle(transform.eulerAngles.y, anguloDestino, ref velocidadGiroSuave, tiempoGiroSuave);

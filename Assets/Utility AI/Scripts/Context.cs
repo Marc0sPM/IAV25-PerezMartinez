@@ -5,7 +5,8 @@ using UnityUtils;
 
 namespace UtilityAI
 {
-    public class Context : MonoBehaviour
+    [System.Serializable]
+    public class Context
     {
         public Brain brain;
         public NavMeshAgent agent;
@@ -23,7 +24,7 @@ namespace UtilityAI
         }
 
         public T GetData<T>(string key) => data.TryGetValue(key, out var value) ? (T)value : default;
-        public void SetData<T>(string key, T value) => data[key] = data.ContainsKey(key) ? value : data.TryAdd(key, value);
+        public void SetData<T>(string key, T value) => data[key] = value;
     }
 
 }

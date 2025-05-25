@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UCM.IAV.Navegacion;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -26,7 +27,7 @@ namespace UCM.IAV.Movimiento
        //  Text heuristicText;
         Text label;
         Text label2;
-        string mazeSize = "10x10";
+        public string mazeSize = "30x30";
 
         private int frameRate = 60;
         TheseusGraph theseusGraph;
@@ -45,7 +46,11 @@ namespace UCM.IAV.Movimiento
 
         GameObject exit = null;
 
-        public int numMinos = 1;
+        [Header("Minotaur Spawning Config")]
+        public int numSpawns = 5;
+        public int minGroupSize = 2;
+        public int maxGroupSize = 5;
+        public bool staticMino = false;
 
         private void Awake()
         {
@@ -158,12 +163,12 @@ namespace UCM.IAV.Movimiento
 
         public void setNumMinos()
         {
-            numMinos = int.Parse(label2.text);
+            numSpawns = int.Parse(label2.text);
         }
 
         public int getNumMinos()
         {
-            return numMinos;
+            return numSpawns;
         }
 
         public void goToScene(string scene)

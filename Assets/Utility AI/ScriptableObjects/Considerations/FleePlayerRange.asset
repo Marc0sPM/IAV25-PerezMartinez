@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fff4ba012f1903f47a5b7179128a7795, type: 3}
-  m_Name: InRangeOfPlayer
+  m_Name: FleePlayerRange
   m_EditorClassIdentifier: 
-  maxDistance: 15
+  maxDistance: 40
   maxAngle: 360
   targetTag: Player
   obstacleTag: Wall

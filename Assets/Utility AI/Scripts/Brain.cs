@@ -11,14 +11,25 @@ namespace UtilityAI
         public Context context;
 
 
-#region Components 
+        #region Components 
         // Add any additional components that are needed for the considerations as Health, Energy, etc.
-#endregion
+        public Force force;
+        #endregion
 
 
         void Awake()
         {
-            context = new Context(this);
+            try
+            {
+                context = new Context(this);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"Failed to create Context: {ex.Message}");
+            }
+
+            force = GetComponent<Force>();
+
             foreach (var action in actions)
             {
                 action.Initialize(context);
@@ -29,7 +40,10 @@ namespace UtilityAI
         {
             UpdateContext(); 
             AIAction bestAction = EvaluateActions();
-
+            if(context == null)
+            {
+                Debug.LogError("Context is null");
+            }
             if (bestAction != null)
             {
                 bestAction.Execute(context);
@@ -41,7 +55,8 @@ namespace UtilityAI
 
             #region UpdateData
             // Update the context data with the info of the initialized componentes before.
-            // Example: context.SetData("health", healthComponent.GetNormalizedHealth());
+            // Example: context.SetData<T>("health", healthComponent.normalizedHealth);
+            context.SetData<float>("force", force.normalizedForce);
             #endregion
         }
 

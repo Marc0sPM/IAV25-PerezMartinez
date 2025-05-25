@@ -22,9 +22,9 @@ namespace UtilityAI
         {
             sphereCollider = GetComponent<SphereCollider>();
             sphereCollider.isTrigger = true;
-            sphereCollider.radius = radius;
+            sphereCollider.radius = radius * 2;
 
-            Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, radius * 2);
             foreach (var collider in colliders)
             {
                 ProcessTrigger(collider, transform => detectedObjects.Add(transform));
@@ -75,6 +75,7 @@ namespace UtilityAI
                     }
                 }
             }
+            
             return closestTarget;
         }
     }

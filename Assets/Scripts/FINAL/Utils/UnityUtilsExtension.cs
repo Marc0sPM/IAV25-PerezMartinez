@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 namespace UnityUtils
 {
@@ -41,6 +43,70 @@ namespace UnityUtils
                 y ?? v.y,
                 z ?? v.z
             );
+        }
+    }
+
+    [Serializable]
+    public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiver
+    {
+        [SerializeField]
+        private List<TKey> keys = new List<TKey>();
+
+        [SerializeField]
+        private List<TValue> values = new List<TValue>();
+
+        private Dictionary<TKey, TValue> dictionary = new Dictionary<TKey, TValue>();
+
+        // Acceso al diccionario en tiempo de ejecución
+        public TValue this[TKey key]
+        {
+            get => dictionary[key];
+            set => dictionary[key] = value;
+        }
+
+        public Dictionary<TKey, TValue>.KeyCollection Keys => dictionary.Keys;
+        public Dictionary<TKey, TValue>.ValueCollection Values => dictionary.Values;
+
+        public int Count => dictionary.Count;
+
+        public bool ContainsKey(TKey key) => dictionary.ContainsKey(key);
+
+        public void Add(TKey key, TValue value) => dictionary.Add(key, value);
+
+        public bool Remove(TKey key) => dictionary.Remove(key);
+
+        public void Clear()
+        {
+            dictionary.Clear();
+            keys.Clear();
+            values.Clear();
+        }
+
+        // SERIALIZACIÓN PARA UNITY
+
+        // Antes de serializar, llenamos las listas keys y values con el contenido del diccionario
+        public void OnBeforeSerialize()
+        {
+            keys.Clear();
+            values.Clear();
+            foreach (var pair in dictionary)
+            {
+                keys.Add(pair.Key);
+                values.Add(pair.Value);
+            }
+        }
+
+        // Después de deserializar, reconstruimos el diccionario a partir de las listas
+        public void OnAfterDeserialize()
+        {
+            dictionary = new Dictionary<TKey, TValue>();
+            int count = Math.Min(keys.Count, values.Count);
+            for (int i = 0; i < count; i++)
+            {
+                // Evitar claves duplicadas en caso de datos corruptos
+                if (!dictionary.ContainsKey(keys[i]))
+                    dictionary.Add(keys[i], values[i]);
+            }
         }
     }
 

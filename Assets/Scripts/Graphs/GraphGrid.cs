@@ -18,6 +18,7 @@ namespace UCM.IAV.Navegacion
     using Unity.AI.Navigation;
     using UnityEngine.AI;
     using System.Collections;
+    using JetBrains.Annotations;
 
     public class GraphGrid : Graph
     {
@@ -43,7 +44,7 @@ namespace UCM.IAV.Navegacion
         public GameObject obstaclePrefab;
 
         public string mapsDir = "Maps"; // Directorio por defecto
-        public string mapName = "10x10.map"; // Fichero por defecto
+        public string mapName = "30x30.map"; // Fichero por defecto
         public bool get8Vicinity = false;
         public float cellSize = 1f;
         [Range(0, Mathf.Infinity)]
@@ -79,6 +80,12 @@ namespace UCM.IAV.Navegacion
             location.y = Mathf.Floor(id / numCols);
             location.x = Mathf.Floor(id % numCols);
             return location;
+        }
+        public float mapSize()
+        {
+            if(numRows <= numCols)
+                return numRows * cellSize;
+            else return numCols * cellSize;
         }
 
         IEnumerator LoadMap(string filename)
