@@ -14,6 +14,11 @@ namespace UtilityAI
         #region Components 
         // Add any additional components that are needed for the considerations as Health, Energy, etc.
         public Force force;
+
+        // Only for debuggin, not functional. 
+        [SerializeField]
+        private AIAction _currentAction;
+
         #endregion
 
 
@@ -46,6 +51,7 @@ namespace UtilityAI
             }
             if (bestAction != null)
             {
+                _currentAction = bestAction;
                 bestAction.Execute(context);
             }
 

@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   consideration: {fileID: 11400000, guid: 8b2dc9757db9e0544add90b7245d09e5, type: 2}
+  minDistanceFromTarget: 10
+  maxFleeDistance: 50
+  maxAttempts: 20
+  maxAllowedHeightDifference: 2
+  rotationSpeed: 5

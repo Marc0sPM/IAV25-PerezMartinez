@@ -46,7 +46,7 @@ namespace UtilityAI
                 sphereCollider = sensorGO.AddComponent<SphereCollider>();
 
             sphereCollider.isTrigger = true;
-            sphereCollider.radius = radius * 2;
+            sphereCollider.radius = radius;
 
             SensorTrigger sensorTrigger = sensorGO.GetComponent<SensorTrigger>();
             if (sensorTrigger == null)

@@ -32,13 +32,17 @@ namespace UCM.IAV.Navegacion
         public float spawnRadius = 2f;
         public float sampleRange = 10f;
         private int nextGroupId = 1;
+        public float maxHeightAllowed = 1f;
+        private float areaRadius;
+
+        public FPManager fpManager; 
 
         /** ---------------------------------------------------/*
          * 
          *          DEPRECATED !!
          * 
          */
-        GraphGrid graph;
+        public GraphGrid graph;
         /*-------------------------------------------------------*/
 
 
@@ -50,6 +54,7 @@ namespace UCM.IAV.Navegacion
         public IntListGODictionary minoGroups = new();
         
         public Queue<int> recycledGroupIds = new();
+
 
 
         public static MinoManager Instance { get; private set; } 
@@ -89,7 +94,8 @@ namespace UCM.IAV.Navegacion
 
             navMeshSurface.BuildNavMesh();
 
-            GenerateMinoGroups(); 
+            GenerateMinoGroups();
+            fpManager.GenerateFP();
 
             navMeshSurface.BuildNavMesh();
 
@@ -100,7 +106,7 @@ namespace UCM.IAV.Navegacion
         {
             GameManager gm = GameManager.instance;
 
-            for(int i= 0; i < gm.numSpawns; i++)
+            for (int i = 0; i < gm.numSpawns; i++)
             {
                 if (!TryGetRandomNavMeshPosition(out Vector3 basePos))
                 {
@@ -116,55 +122,74 @@ namespace UCM.IAV.Navegacion
                     Vector3 offset = Random.insideUnitCircle.normalized * spawnRadius;
                     Vector3 candidatePos = basePos + new Vector3(offset.x, 0, offset.y);
 
-                    if(NavMesh.SamplePosition(candidatePos, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
+                    if (NavMesh.SamplePosition(candidatePos, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
                     {
                         float distToBase = Vector3.Distance(hit.position, basePos);
 
-                        if(distToBase <= spawnRadius * 1.2f)
+                        if (distToBase <= spawnRadius * 1.2f)
                         {
                             GameObject prefabToUse = gm.staticMino ? (Random.Range(0, 2) == 0 ? minotaur : static_minotaur) : minotaur;
                             GameObject mino = Instantiate(prefabToUse, hit.position + new Vector3(0, 0.3f, 0), Quaternion.identity);
                             listMinotaurs.Add(mino);
                             groupMembers.Add(mino);
+
+                            Force force = mino.GetComponent<Force>();
+                            if (force != null)
+                            {
+                                force.force = Random.Range(gm.minForce, gm.maxForce + 1);
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Force component not found on minotaur prefab.");
+                            }
+                        }
+
+                    }
+
+                    if (groupMembers.Count >= 2)
+                    {
+                        GameObject first = groupMembers[0];
+                        GameObject second = groupMembers[1];
+
+                        AddToNewGroup(first, second);
+
+                        for (int k = 2; k < groupMembers.Count; k++)
+                        {
+                            AddToGroup(groupMembers[k], first.GetComponentInParent<GroupComponent>().g_id);
+                        }
+
+                    }
+                }
+            }
+
+            bool TryGetRandomNavMeshPosition(out Vector3 result)
+            {
+                areaRadius = graph.mapSize() / 2f;
+                Vector3 navmeshCenter = new Vector3(areaRadius, 0, areaRadius);
+
+                for (int attempts = 0; attempts < 10; attempts++)
+                {
+                    Vector3 randomPoint = navmeshCenter + Random.insideUnitSphere * areaRadius * 1.5f;
+                    randomPoint.y = 0;
+
+                    if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, sampleRange, NavMesh.AllAreas))
+                    {
+                        if (hit.position.y <= maxHeightAllowed)
+                        {
+                            result = hit.position;
+                            return true;
+                        }
+                        else
+                        {
+                            Debug.Log($"Posición descartada por altura: {hit.position.y}");
                         }
                     }
                 }
-
-                if(groupMembers.Count >= 2) {
-                    GameObject first = groupMembers[0];
-                    GameObject second = groupMembers[1];
-
-                    AddToNewGroup(first, second); 
-
-                    for(int k = 2; k < groupMembers.Count; k++)
-                    {
-                        AddToGroup(groupMembers[k], first.GetComponentInParent<GroupComponent>().g_id);
-                    }
-
-                }
-            }
-        }
-
-        bool TryGetRandomNavMeshPosition(out Vector3 result)
-        {
-            for (int attempts = 0; attempts < 10; attempts++)
-            {
-                float areaRadius = graph.mapSize();
-                Vector3 randomPoint = transform.position + Random.insideUnitSphere * areaRadius;
-                randomPoint.y = 0;
-
-                if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, sampleRange, NavMesh.AllAreas))
-                {
-                    result = hit.position;
-                    return true;
-                }
+                result = Vector3.zero;
+                return false;
             }
 
-            result = Vector3.zero;
-            return false;
         }
-
-
         
         /** --------------------------------------------------/*
          * 
@@ -196,15 +221,26 @@ namespace UCM.IAV.Navegacion
 
         public Transform GetClosestMino(Transform origin)
         {
-            if (listMinotaurs.Count == 0) return null; 
+            if (listMinotaurs.Count == 0) return null;
 
             Transform closestMino = null;
             float closestDistance = Mathf.Infinity;
             Vector3 position = origin.position;
+
+            GroupComponent originGroup = origin.GetComponentInParent<GroupComponent>();
+            int originGid = originGroup != null ? originGroup.g_id : -1;
+
             foreach (GameObject mino in listMinotaurs)
             {
-                // Cannot compare the minotaur with itself
-                if (origin == mino.transform)  continue;
+                if (origin == mino.transform) continue;
+
+                GroupComponent minoGroup = mino.GetComponentInParent<GroupComponent>();
+                int minoGid = minoGroup != null ? minoGroup.g_id : -1;
+
+                // Saltar si es del mismo grupo
+                if (originGid != -1 && originGid == minoGid)
+                    continue;
+
                 float distance = Vector3.Distance(position, mino.transform.position);
                 if (distance < closestDistance)
                 {
@@ -212,6 +248,7 @@ namespace UCM.IAV.Navegacion
                     closestMino = mino.transform;
                 }
             }
+
             return closestMino;
         }
 
@@ -336,9 +373,15 @@ namespace UCM.IAV.Navegacion
                     }
                     minoGroups.Remove(gId);
                     recycledGroupIds.Enqueue(gId);
-                    Debug.Log("Group " + gId + " deleted and ID recycled.");
+                   //  Debug.Log("Group " + gId + " deleted and ID recycled.");
                 }
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position + new Vector3(areaRadius, 0, areaRadius), areaRadius * 1.5f);
         }
     }
 }

@@ -17,10 +17,6 @@ public class GroupComponent : MonoBehaviour
         triggerObject.transform.localPosition = Vector3.zero;
         triggerObject.tag = groupTag;
 
-        SphereCollider sc = triggerObject.AddComponent<SphereCollider>();
-        sc.radius = grpRadius;
-        sc.isTrigger = true;
-
     }
 
     public void HandleTriggerEnterFromSelf(Collider other)
@@ -67,7 +63,7 @@ public class GroupComponent : MonoBehaviour
 
         if (g_id != -1 && !foundNearby)
         {
-            Debug.Log($"{name} no ha encontrado a nadie cercano, g_id = {g_id}, saliendo del grupo.");
+           //  Debug.Log($"{name} no ha encontrado a nadie cercano, g_id = {g_id}, saliendo del grupo.");
             MinoManager.Instance.RemoveFromGroup(gameObject, g_id);
         }
     }

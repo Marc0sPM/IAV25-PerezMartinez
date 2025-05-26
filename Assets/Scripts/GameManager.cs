@@ -50,6 +50,11 @@ namespace UCM.IAV.Movimiento
         public int numSpawns = 5;
         public int minGroupSize = 2;
         public int maxGroupSize = 5;
+        public int minForce = 1;
+        public int maxForce = 7;
+
+
+
         public bool staticMino = false;
 
         private void Awake()
