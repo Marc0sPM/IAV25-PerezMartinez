@@ -6,9 +6,9 @@ public class GroupComponent : MonoBehaviour
 {
     public int g_id = -1; // Group ID (-1 if alone)
     public string groupTag = "Minotaur";
-    public float grpRadius = 3f; // Radius to consider minotaurs in the same group
-    public LayerMask minotaurMask; // Define qué capas bloquean la visión (paredes, etc.)
-    public LayerMask obstacleMask;
+    public float grpRadius = 3f; // Radius to consider minotaurs in the same group.
+    public LayerMask minotaurMask; // Define object which consider to taget.
+    public LayerMask obstacleMask; // Define obstacles to not take into account if nearby. 
 
     void Awake()
     {
@@ -55,7 +55,7 @@ public class GroupComponent : MonoBehaviour
 
             if (!Physics.Raycast(transform.position, dir, dist + 0.1f, obstacleMask))
             {
-                // Si alguno está solo o están en grupos distintos
+               // If alone or belong to diferent groups.
                 if (g_id == -1 || otherComp.g_id == -1 || g_id != otherComp.g_id)
                 {
                     MinoManager.Instance.AssignSameGroup(gameObject, other);
@@ -65,7 +65,6 @@ public class GroupComponent : MonoBehaviour
             }
         }
 
-        // Si no hay nadie cercano visible, salirse del grupo
         if (g_id != -1 && !foundNearby)
         {
             Debug.Log($"{name} no ha encontrado a nadie cercano, g_id = {g_id}, saliendo del grupo.");

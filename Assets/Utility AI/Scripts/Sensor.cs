@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace UtilityAI
 {
-    // Este script va en el hijo y redirige los eventos al padre
     public class SensorTrigger : MonoBehaviour
     {
         public Sensor parent;
@@ -30,7 +29,7 @@ namespace UtilityAI
 
         private void Awake()
         {
-            // Crear hijo "Sensor" si no existe
+            // Create child "Sensor" if it doesn't exist
             Transform sensorTransform = transform.Find("Sensor");
             if (sensorTransform == null)
             {
@@ -42,7 +41,6 @@ namespace UtilityAI
 
             GameObject sensorGO = sensorTransform.gameObject;
 
-            // Añadir collider
             sphereCollider = sensorGO.GetComponent<SphereCollider>();
             if (sphereCollider == null)
                 sphereCollider = sensorGO.AddComponent<SphereCollider>();
@@ -50,14 +48,12 @@ namespace UtilityAI
             sphereCollider.isTrigger = true;
             sphereCollider.radius = radius * 2;
 
-            // Añadir el script redirigidor
             SensorTrigger sensorTrigger = sensorGO.GetComponent<SensorTrigger>();
             if (sensorTrigger == null)
                 sensorTrigger = sensorGO.AddComponent<SensorTrigger>();
 
             sensorTrigger.parent = this;
 
-            // Detección inicial
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius * 2);
             foreach (var collider in colliders)
             {
@@ -67,7 +63,8 @@ namespace UtilityAI
 
         public void HandleTriggerStay(Collider other)
         {
-            ProcessTrigger(other, t => {
+            ProcessTrigger(other, t =>
+            {
                 if (!detectedObjects.Contains(t))
                     detectedObjects.Add(t);
             });

@@ -328,7 +328,6 @@ namespace UCM.IAV.Navegacion
                 minoGroups[gId].Remove(mino);
                 mino.GetComponentInParent<GroupComponent>().g_id = -1;
 
-                // Si el grupo queda vacío, lo eliminamos y reciclamos el ID
                 if (minoGroups[gId].Count  <= 1)
                 {
                     foreach (var minoGO in minoGroups[gId])
