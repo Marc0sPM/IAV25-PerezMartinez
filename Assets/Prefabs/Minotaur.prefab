@@ -1,52 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1337692612490628026
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5991793168925070693}
-  - component: {fileID: 4100469006655516843}
-  m_Layer: 7
-  m_Name: GroupDetector
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5991793168925070693
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337692612490628026}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6486275522226813505}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4100469006655516843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337692612490628026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32f8762db8ba3b43a51325f6dea021e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  g_id: -1
-  groupTag: Minotaur
-  grpRadius: 3
 --- !u!1 &1546305043728244485
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +476,7 @@ GameObject:
   - component: {fileID: 928812362819838011}
   - component: {fileID: 5856985828648263928}
   - component: {fileID: 5856985828648263929}
+  - component: {fileID: 6641015655304071663}
   - component: {fileID: 6959568701894184007}
   - component: {fileID: 1759413054890902854}
   - component: {fileID: 8357271194336293764}
@@ -551,7 +505,6 @@ Transform:
   m_Children:
   - {fileID: 7793693059717024849}
   - {fileID: 1207144781549144241}
-  - {fileID: 5991793168925070693}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &928812362819838011
@@ -624,6 +577,27 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.42
   m_Center: {x: 0, y: 0.4, z: 0}
+--- !u!114 &6641015655304071663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5856985828648263931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32f8762db8ba3b43a51325f6dea021e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  g_id: -1
+  groupTag: Minotaur
+  grpRadius: 3
+  minotaurMask:
+    serializedVersion: 2
+    m_Bits: 128
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &6959568701894184007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 087291f26ed2e3e42a3888e86bc0a33c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 40
+  radius: 20
   targetTags:
   - Player
   detectedObjects: []

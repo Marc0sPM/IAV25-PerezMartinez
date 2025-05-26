@@ -48,6 +48,9 @@ namespace UCM.IAV.Navegacion
         public List<GameObject> listMinotaurs = new();
 
         public IntListGODictionary minoGroups = new();
+        
+        public Queue<int> recycledGroupIds = new();
+
 
         public static MinoManager Instance { get; private set; } 
 
@@ -135,7 +138,7 @@ namespace UCM.IAV.Navegacion
 
                     for(int k = 2; k < groupMembers.Count; k++)
                     {
-                        AddToGroup(groupMembers[k], first.GetComponentInChildren<GroupComponent>().g_id);
+                        AddToGroup(groupMembers[k], first.GetComponentInParent<GroupComponent>().g_id);
                     }
 
                 }
@@ -217,8 +220,8 @@ namespace UCM.IAV.Navegacion
         /// </summary>
         public void AssignSameGroup(GameObject mino1, GameObject mino2)
         {
-            GroupComponent comp1 = mino1.GetComponentInChildren<GroupComponent>();
-            GroupComponent comp2 = mino2.GetComponentInChildren<GroupComponent>();
+            GroupComponent comp1 = mino1.GetComponentInParent<GroupComponent>();
+            GroupComponent comp2 = mino2.GetComponentInParent<GroupComponent>();
             if(comp1 == null || comp2 == null)
             {
                 Debug.LogError("Tried to assign to a group a null mino group component");
@@ -267,7 +270,9 @@ namespace UCM.IAV.Navegacion
                 return;
             }
 
-            int newGroupId = nextGroupId++; // Genera un nuevo ID único para este grupo
+            // Reutiliza ID reciclado si hay alguno
+            int newGroupId = recycledGroupIds.Count > 0 ? recycledGroupIds.Dequeue() : nextGroupId++;
+
             Debug.Log("Creating new group with ID: " + newGroupId);
 
             List<GameObject> groupList = new();
@@ -282,7 +287,7 @@ namespace UCM.IAV.Navegacion
             if (!groupList.Contains(mino2))
             {
                 groupList.Add(mino2);
-                mino2.GetComponentInChildren<GroupComponent>().g_id = newGroupId;
+                mino2.GetComponentInParent<GroupComponent>().g_id = newGroupId;
             }
         }
 
@@ -301,7 +306,7 @@ namespace UCM.IAV.Navegacion
             if (!minoGroups[groupId].Contains(mino))
             {
                 minoGroups[groupId].Add(mino);
-                mino.GetComponentInChildren<GroupComponent>().g_id = groupId;
+                mino.GetComponentInParent<GroupComponent>().g_id = groupId;
             }
         }
 
@@ -320,17 +325,20 @@ namespace UCM.IAV.Navegacion
 
             if (minoGroups[gId].Contains(mino))
             {
-                mino.GetComponentInChildren<GroupComponent>().g_id = -1;
                 minoGroups[gId].Remove(mino);
-            }
-            // In case of group empty or only one minotaur left, remove the group
-            if (minoGroups[gId].Count <= 1)
-            {
-                foreach (var minotaur in minoGroups[gId])
+                mino.GetComponentInParent<GroupComponent>().g_id = -1;
+
+                // Si el grupo queda vacío, lo eliminamos y reciclamos el ID
+                if (minoGroups[gId].Count  <= 1)
                 {
-                    minotaur.GetComponentInChildren<GroupComponent>().g_id = -1;
+                    foreach (var minoGO in minoGroups[gId])
+                    {
+                        minoGO.GetComponentInParent<GroupComponent>().g_id = -1;
+                    }
+                    minoGroups.Remove(gId);
+                    recycledGroupIds.Enqueue(gId);
+                    Debug.Log("Group " + gId + " deleted and ID recycled.");
                 }
-                minoGroups.Remove(gId);
             }
         }
     }

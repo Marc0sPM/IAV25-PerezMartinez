@@ -15,6 +15,7 @@ TagManager:
   - DDLabel
   - MinoLabel
   - Minotaur
+  - groupDetector
   layers:
   - Default
   - TransparentFX

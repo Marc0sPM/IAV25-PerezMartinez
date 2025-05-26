@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using System.Net.WebSockets;
 using System.Collections.Generic;
 using UCM.IAV.Navegacion;
 using UnityEngine;
@@ -9,65 +7,75 @@ public class GroupComponent : MonoBehaviour
     public int g_id = -1; // Group ID (-1 if alone)
     public string groupTag = "Minotaur";
     public float grpRadius = 3f; // Radius to consider minotaurs in the same group
+    public LayerMask minotaurMask; // Define qué capas bloquean la visión (paredes, etc.)
+    public LayerMask obstacleMask;
 
     void Awake()
     {
-        SphereCollider sc = gameObject.AddComponent<SphereCollider>();
+        GameObject triggerObject = new GameObject("GroupTrigger");
+        triggerObject.transform.SetParent(transform);
+        triggerObject.transform.localPosition = Vector3.zero;
+        triggerObject.tag = groupTag;
+
+        SphereCollider sc = triggerObject.AddComponent<SphereCollider>();
         sc.radius = grpRadius;
         sc.isTrigger = true;
+
     }
-    private void OnTriggerEnter(Collider other)
+
+    public void HandleTriggerEnterFromSelf(Collider other)
     {
         if (!other.CompareTag(groupTag)) return;
 
-        GroupComponent oGrp = other.GetComponentInChildren<GroupComponent>();
-
-        if (oGrp == null) Debug.LogError("GroupComponent of " + other.gameObject + " was null.");
+        GroupComponent oGrp = other.GetComponentInParent<GroupComponent>();
+        if (oGrp == null)
+        {
+            Debug.LogError("GroupComponent of " + other.gameObject + " was null.");
+            return;
+        }
 
         MinoManager.Instance.AssignSameGroup(this.gameObject, other.gameObject);
     }
 
-    // Check if the minotaur is still in a group, if not, remove it from the group
     private void Update()
     {
-        if (g_id == -1) return; // Don't belong to a group
+        Collider[] hits = Physics.OverlapSphere(transform.position, grpRadius, minotaurMask);
+        bool foundNearby = false;
 
-        List<GameObject> minos = MinoManager.Instance.minoGroups.ContainsKey(g_id) ? 
-            MinoManager.Instance.minoGroups[g_id] : null;
-
-        if(minos == null) return;
-
-        // Only one minotaur in the group, remove the group
-        if(minos.Count <= 1)
+        foreach (var hit in hits)
         {
-            MinoManager.Instance.RemoveFromGroup(gameObject, g_id);
-            return;
-        }
+            GameObject other = hit.gameObject;
+            if (other == gameObject || !other.CompareTag(groupTag)) continue;
 
-        bool isNearSomeone = false;
-        foreach (var  mino in minos)
-        {
-            if (mino == this.gameObject) continue; 
+            GroupComponent otherComp = other.GetComponentInParent<GroupComponent>();
+            if (otherComp == null) continue;
 
-            float dist = Vector3.Distance(mino.transform.position, transform.position);
-            if(dist <= grpRadius * 1.5f)
+            float dist = Vector3.Distance(transform.position, other.transform.position);
+            Vector3 dir = (other.transform.position - transform.position).normalized;
+
+            if (!Physics.Raycast(transform.position, dir, dist + 0.1f, obstacleMask))
             {
-                isNearSomeone = true;
-                break;
+                // Si alguno está solo o están en grupos distintos
+                if (g_id == -1 || otherComp.g_id == -1 || g_id != otherComp.g_id)
+                {
+                    MinoManager.Instance.AssignSameGroup(gameObject, other);
+                }
+
+                foundNearby = true;
             }
         }
 
-        if(!isNearSomeone)
+        // Si no hay nadie cercano visible, salirse del grupo
+        if (g_id != -1 && !foundNearby)
         {
+            Debug.Log($"{name} no ha encontrado a nadie cercano, g_id = {g_id}, saliendo del grupo.");
             MinoManager.Instance.RemoveFromGroup(gameObject, g_id);
         }
-
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, grpRadius * 1.5f);
+        Gizmos.DrawWireSphere(transform.position, grpRadius);
     }
-
 }
