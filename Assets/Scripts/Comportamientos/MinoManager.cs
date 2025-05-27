@@ -117,10 +117,14 @@ namespace UCM.IAV.Navegacion
                 int groupSize = Random.Range(gm.minGroupSize, gm.maxGroupSize + 1);
                 List<GameObject> groupMembers = new();
 
-                for (int j = 0; j < groupSize; j++)
+                int attempts = 0;
+                int maxAttempts = groupSize * 10; // Para evitar bucles infinitos
+                while (groupMembers.Count < groupSize && attempts < maxAttempts)
                 {
-                    Vector3 offset = Random.insideUnitCircle.normalized * spawnRadius;
-                    Vector3 candidatePos = basePos + new Vector3(offset.x, 0, offset.y);
+                    attempts++;
+
+                    Vector2 offset2D = Random.insideUnitCircle.normalized * spawnRadius;
+                    Vector3 candidatePos = basePos + new Vector3(offset2D.x, 0, offset2D.y);
 
                     if (NavMesh.SamplePosition(candidatePos, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
                     {
@@ -143,22 +147,22 @@ namespace UCM.IAV.Navegacion
                                 Debug.LogWarning("Force component not found on minotaur prefab.");
                             }
                         }
-
                     }
+                }
 
-                    if (groupMembers.Count >= 2)
+
+                if (groupMembers.Count >= 2)
+                {
+                    GameObject first = groupMembers[0];
+                    GameObject second = groupMembers[1];
+
+                    AddToNewGroup(first, second);
+
+                    for (int k = 2; k < groupMembers.Count; k++)
                     {
-                        GameObject first = groupMembers[0];
-                        GameObject second = groupMembers[1];
-
-                        AddToNewGroup(first, second);
-
-                        for (int k = 2; k < groupMembers.Count; k++)
-                        {
-                            AddToGroup(groupMembers[k], first.GetComponentInParent<GroupComponent>().g_id);
-                        }
-
+                        AddToGroup(groupMembers[k], first.GetComponentInParent<GroupComponent>().g_id);
                     }
+
                 }
             }
 
@@ -167,7 +171,7 @@ namespace UCM.IAV.Navegacion
                 areaRadius = graph.mapSize() / 2f;
                 Vector3 navmeshCenter = new Vector3(areaRadius, 0, areaRadius);
 
-                for (int attempts = 0; attempts < 10; attempts++)
+                for (int attempts = 0; attempts < 20; attempts++)
                 {
                     Vector3 randomPoint = navmeshCenter + Random.insideUnitSphere * areaRadius * 1.5f;
                     randomPoint.y = 0;

@@ -317,7 +317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fpPrefab: {fileID: 2975095521799642490, guid: 9dbcf6e4e74f1b44bbae897c063c72ac,
     type: 3}
-  numFP: 5
+  numFP: 9
   spawnRadius: 3
   maxHeightAllowed: 3
   sampleRange: 1
@@ -1540,18 +1540,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3927382212531977757, guid: b3cc6905fc77e094aa2dbca20e81e2d4,
         type: 3}
-      propertyPath: numSpawns
+      propertyPath: maxForce
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3927382212531977757, guid: b3cc6905fc77e094aa2dbca20e81e2d4,
+        type: 3}
+      propertyPath: minForce
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3927382212531977757, guid: b3cc6905fc77e094aa2dbca20e81e2d4,
         type: 3}
-      propertyPath: maxGroupSize
+      propertyPath: numSpawns
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3927382212531977757, guid: b3cc6905fc77e094aa2dbca20e81e2d4,
         type: 3}
+      propertyPath: maxGroupSize
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3927382212531977757, guid: b3cc6905fc77e094aa2dbca20e81e2d4,
+        type: 3}
       propertyPath: minGroupSize
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7991256408961658696, guid: b3cc6905fc77e094aa2dbca20e81e2d4,
         type: 3}

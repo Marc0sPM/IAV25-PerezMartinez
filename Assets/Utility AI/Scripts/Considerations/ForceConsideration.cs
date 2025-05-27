@@ -7,8 +7,6 @@ namespace UtilityAI
     [CreateAssetMenu(menuName = "Utility AI/Considerations/ForceComparison")]
     public class ForceComparison : Consideration
     {
-        public float groupBonusFactor = 0.0005f;
-
         public override float Evaluate(Context context)
         {
             float myForce = context.GetData<float>("force");
@@ -40,13 +38,13 @@ namespace UtilityAI
                     }
 
                     float avgForce = totalForce / group.Count;
-                    float bonus = (groupBonusFactor * Mathf.Sqrt(group.Count)) / Force.maxForce;
-                    myForce = avgForce; 
+                    float bonus = Mathf.Sqrt(group.Count) / Force.maxForce;
+                    myForce = avgForce + bonus / 2; 
                 }
             }
 
             float ratio = myForce / targetForce;
-            float response = Mathf.Pow(ratio, 2f); // más sensible a diferencias
+            float response = Mathf.Pow(ratio, 2.6f); // más sensible a diferencias
 
             return Mathf.Clamp01(response);
         }
