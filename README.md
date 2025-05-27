@@ -3,7 +3,7 @@
 
 ## Instalación y uso
 
-> Todo el contenido del proyecto está disponible aquí en este proyecto. **Unity 2022.3.56f1** es empleado para este proyecto. También es necesario inicializar Git LFS al bajarse el repositorio. 
+> Todo el contenido del proyecto está disponible aquí en este proyecto. **Unity 6000.0.34f1** es empleado para este proyecto. También es necesario inicializar Git LFS al bajarse el repositorio. 
 
 ## Introducción
 > Este es el proyectio final de la asignatura de Inteligencia Artificial para Videojuegos del Grado en Desarrollo de Videojuegos de la UCM.
