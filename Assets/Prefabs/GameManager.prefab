@@ -44,4 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6da3b7a0664b51845bd30d20b5e67605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numMinos: 2
+  mazeSize: 30x30
+  numSpawns: 4
+  minGroupSize: 1
+  maxGroupSize: 3
+  minForce: 1
+  maxForce: 4
+  staticMino: 0

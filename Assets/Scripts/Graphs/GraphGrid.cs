@@ -14,11 +14,9 @@ namespace UCM.IAV.Navegacion
     using System.Collections.Generic;
     using System.IO;
     using UCM.IAV.Movimiento;
-    using UnityEditor;
     using Unity.AI.Navigation;
-    using UnityEngine.AI;
     using System.Collections;
-    using JetBrains.Annotations;
+   
 
     public class GraphGrid : Graph
     {
@@ -91,8 +89,9 @@ namespace UCM.IAV.Navegacion
         IEnumerator LoadMap(string filename)
         {
             string path;
-            
-            path = Application.dataPath + "/" + mapsDir + "/" + filename;
+
+            path = Path.Combine(Application.streamingAssetsPath, mapsDir, filename);
+            Debug.LogError("Path: " + path); 
 
             try
             {

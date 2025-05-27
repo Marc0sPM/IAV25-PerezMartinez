@@ -772,7 +772,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   g_id: -1
   groupTag: Minotaur
-  grpRadius: 3
+  grpRadius: 5
   minotaurMask:
     serializedVersion: 2
     m_Bits: 128
@@ -808,6 +808,7 @@ MonoBehaviour:
   radius: 20
   color: {r: 0.99765027, g: 1, b: 0, a: 1}
   offset: {x: 0, y: 0, z: 0}
+  onSelected: 1
 --- !u!114 &8357271194336293764
 MonoBehaviour:
   m_ObjectHideFlags: 0

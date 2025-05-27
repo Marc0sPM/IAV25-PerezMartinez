@@ -44,7 +44,7 @@ namespace UtilityAI
             }
 
             float ratio = myForce / targetForce;
-            float response = Mathf.Pow(ratio, 2.6f); // más sensible a diferencias
+            float response = Mathf.Pow(ratio, 2.5f); // más sensible a diferencias
 
             return Mathf.Clamp01(response);
         }
