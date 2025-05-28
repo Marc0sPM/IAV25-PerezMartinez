@@ -91,7 +91,6 @@ namespace UCM.IAV.Navegacion
             string path;
 
             path = Path.Combine(Application.streamingAssetsPath, mapsDir, filename);
-            Debug.LogError("Path: " + path); 
 
             try
             {

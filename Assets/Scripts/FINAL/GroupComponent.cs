@@ -19,20 +19,6 @@ public class GroupComponent : MonoBehaviour
 
     }
 
-    public void HandleTriggerEnterFromSelf(Collider other)
-    {
-        if (!other.CompareTag(groupTag)) return;
-
-        GroupComponent oGrp = other.GetComponentInParent<GroupComponent>();
-        if (oGrp == null)
-        {
-            Debug.LogError("GroupComponent of " + other.gameObject + " was null.");
-            return;
-        }
-
-        MinoManager.Instance.AssignSameGroup(this.gameObject, other.gameObject);
-    }
-
     private void Update()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, grpRadius, minotaurMask);
